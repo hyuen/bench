@@ -19,6 +19,14 @@ void matmul1(float *c, float *a, float *b, int m, int k, int n)
 
 void matmul2(float *c, float *a, float *b, int m, int k, int n)
 {
+    for (int i = 0; i < m; i++)        
+        for (int l = 0; l < k; l++)
+            for (int j = 0; j < n; j++)
+                c[i * n + j] += a[i * k + l] * b[l * n + j];
+}
+
+void matmul21(float *c, float *a, float *b, int m, int k, int n)
+{
     #pragma omp parallel for
     for (int i = 0; i < m; i++)        
         for (int l = 0; l < k; l++)
@@ -60,7 +68,7 @@ void matmul6(float *c, float *a, float *b, int m, int k, int n)
 
 void matmul7(float *c, float *a, float *b, int m, int k, int n)
 {
-    const int block_size = 48;
+    const int block_size = 128;
     #pragma omp parallel for
     for (int ii =0; ii <m; ii+= block_size)
         for (int jj =0; jj <n; jj+= block_size)
@@ -110,12 +118,13 @@ int main(void)
     auto c_out = new float[m * n];
     int times = 10;
 
-    bench(m, n, k, times, "matmul1", matmul1);
+    // bench(m, n, k, times, "matmul1", matmul1);
     bench(m, n, k, times, "matmul2", matmul2);
-    bench(m, n, k, times, "matmul3", matmul3);
-    bench(m, n, k, times, "matmul4", matmul4);
-    bench(m, n, k, times, "matmul5", matmul5);
-    bench(m, n, k, times, "matmul6", matmul6);
+    bench(m, n, k, times, "matmul21", matmul21);
+    // bench(m, n, k, times, "matmul3", matmul3);
+    // bench(m, n, k, times, "matmul4", matmul4);
+    // bench(m, n, k, times, "matmul5", matmul5);
+    // bench(m, n, k, times, "matmul6", matmul6);
     bench(m, n, k, times, "matmul7", matmul7);
 
 

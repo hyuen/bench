@@ -1,6 +1,7 @@
 GFLAGS = -std=c++11 -O3 # -march=native -funroll-loops
+CLANGPP=/opt/homebrew/opt/llvm/bin/clang++
 all:
-	clang++ $(GFLAGS) -o bench bench.cc
+	$(CLANGPP) $(GFLAGS) -o bench bench.cc -fopenmp
 
 as:
-	clang++ $(GFLAGS) -S -o bench.S bench.cc
+	$(CLANGPP) $(GFLAGS) -S -o bench.S bench.cc
