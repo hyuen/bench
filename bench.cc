@@ -50,7 +50,7 @@ void matmul4(float *c, float *a, float *b, int m, int k, int n)
                 c[i * n + j] += a[i * k + l] * b[l * n + j];
 }
 
-void matmul5(float *c, float *a, float *b, int m, int k, int n)
+void matmul5(float *c, float *a, float *b, int m, int k, int n, int bs)
 {
     for (int l = 0; l < k; l++)
         for (int i = 0; i < m; i++)
@@ -109,7 +109,7 @@ void bench(int m, int n, int k, int times, const string &method_name, int bs, vo
 
 int main(void)
 {
-    int m = 1024 *4; // 4096; // * 10000;
+    int m = 1024; // 4096; // * 10000;
     int n = m;
     int k = m;
 
@@ -123,9 +123,9 @@ int main(void)
     bench(m, n, k, times, "matmul21", 0, matmul21);
     // bench(m, n, k, times, "matmul3", matmul3);
     // bench(m, n, k, times, "matmul4", matmul4);
-    // bench(m, n, k, times, "matmul5", matmul5);
+    bench(m, n, k, times, "matmul5", 0, matmul5);
     // bench(m, n, k, times, "matmul6", matmul6);
-    for (int bs=128; bs<=160; bs+=8){
+    for (int bs=4; bs<=1024; bs*=2){
         cout << "bs=" << bs << endl;
         bench(m, n, k, times, "matmul7", bs, matmul7);
     }
